@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rebota</title>
+</head>
+<body>
+    <canvas width="600" height="400"> </canvas>
+
+<script>
+    let pantalla = document.querySelector("canvas");
+    let pincel = pantalla.getContext("2d");        
+    pincel.fillStyle = "white";
+    pincel.fillRect(0,0,600,400); 
+
+    let radio = [10,20,30];
+
+    function disenharCircunferencia(x,y,radio,color){
+        pincel.fillStyle = color;
+        pincel.beginPath();
+        pincel.arc(x,y,radio,0,2*Math.PI);
+        pincel.fill();
+    }    
+
+    function limpiarPantalla(){
+        pincel.clearRect(0,0,600,400);
+    }
+
+    let x = 0;
+    let sentido = 1;
+
+
+    const disenarObjetivo = (x,y) => {
+        disenharCircunferencia(x,y,radio[2],"red");
+        disenharCircunferencia(x,y,radio[1],"black");
+        disenharCircunferencia(x,y,radio[0],"white");
+    };
+
+    const sortear = (maximo) => {
+    return Math.floor(Math.random()*maximo);
+    }
+
+
+    let xAleatorio;
+    let yAleatorio;
+
+    function actualizarPantalla(){
+        xAleatorio = sortear(600);
+        yAleatorio = sortear(400);
+        limpiarPantalla();
+        disenarObjetivo(xAleatorio,yAleatorio);
+    }
+    setInterval(actualizarPantalla,2000);
+
+    function disparar(evento){
+
+        let x = evento.pageX - pantalla.offsetLeft;
+        let y = evento.pageY - pantalla.offsetTop;
+
+        if( (x < xAleatorio + radio[0])&& 
+            (x > xAleatorio - radio[0])&& 
+            (y < yAleatorio + radio[0])&& 
+            (y > yAleatorio - radio[0])){
+        alert("Tiro Certero");
+        }
+    }
+    pantalla.onclick = disparar;
+
+</script> 
+</body>
+</html>
